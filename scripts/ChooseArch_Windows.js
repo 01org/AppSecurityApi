@@ -22,60 +22,46 @@ ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF S
 var fs = require('fs');
 var path=require('path');
 var appDir = path.dirname(require.main.filename);
-
-function getDirectories(srcpath) {
-    return fs.readdirSync(srcpath).filter(function(file) {
-        return fs.statSync(path.join(srcpath, file)).isDirectory();
-    });
-}
-
 module.exports = function(context){
-
     var cordova_util = context.requireCordovaModule('cordova-lib/src/cordova/util'),
-    cordovaProjectRoot = cordova_util.isCordova(),
-    directories = getDirectories(path.join(cordovaProjectRoot,'platforms'));
+    projectRoot = cordova_util.isCordova();
+    platformRoot = projectRoot + '/platforms/windows';
 
-    directories.forEach(function(projectRoot){
-        // check if we already run the script
-        if(projectRoot.toLowerCase().indexOf("windows")===-1) {
-            return;
-        }
-        projectRoot=path.join(cordovaProjectRoot,projectRoot);
-        fs.access(projectRoot+'/plugins/com.intel.security/win8/x86/IntelSecurityServicesWRC.dll', fs.F_OK, function (err) {
-          if (err !== 1){
-            // file not exist we can run the script
-            try { fs.mkdirSync(projectRoot+'/plugins'); } catch(e) {}
-            try { fs.mkdirSync(projectRoot+'/plugins/com.intel.security/'); } catch(e) {}
-            try { fs.mkdirSync(projectRoot+'/plugins/com.intel.security/win8'); } catch(e) {}
-            try { fs.mkdirSync(projectRoot+'/plugins/com.intel.security/win10'); } catch(e) {}
-            try { fs.mkdirSync(projectRoot+'/plugins/com.intel.security/win8/x86'); } catch(e) {}
-            try { fs.mkdirSync(projectRoot+'/plugins/com.intel.security/win8/x64'); } catch(e) {}
-            try { fs.mkdirSync(projectRoot+'/plugins/com.intel.security/win8/arm'); } catch(e) {}
-            try { fs.mkdirSync(projectRoot+'/plugins/com.intel.security/win10/x86'); } catch(e) {}
-            try { fs.mkdirSync(projectRoot+'/plugins/com.intel.security/win10/x64'); } catch(e) {}
-            try { fs.mkdirSync(projectRoot+'/plugins/com.intel.security/win10/arm'); } catch(e) {}
+    // check if we already run the script
+    fs.access(platformRoot+'/plugins/com.intel.security/win8/x86/IntelSecurityServicesWRC.dll', fs.F_OK, function (err) {
+      if (err !== 1){
+        // file not exist we can run the script
+        try { fs.mkdirSync(platformRoot+'/plugins'); } catch(e) {}
+        try { fs.mkdirSync(platformRoot+'/plugins/com.intel.security/'); } catch(e) {}
+        try { fs.mkdirSync(platformRoot+'/plugins/com.intel.security/win8'); } catch(e) {}
+        try { fs.mkdirSync(platformRoot+'/plugins/com.intel.security/win10'); } catch(e) {}
+        try { fs.mkdirSync(platformRoot+'/plugins/com.intel.security/win8/x86'); } catch(e) {}
+        try { fs.mkdirSync(platformRoot+'/plugins/com.intel.security/win8/x64'); } catch(e) {}
+        try { fs.mkdirSync(platformRoot+'/plugins/com.intel.security/win8/arm'); } catch(e) {}
+        try { fs.mkdirSync(platformRoot+'/plugins/com.intel.security/win10/x86'); } catch(e) {}
+        try { fs.mkdirSync(platformRoot+'/plugins/com.intel.security/win10/x64'); } catch(e) {}
+        try { fs.mkdirSync(platformRoot+'/plugins/com.intel.security/win10/arm'); } catch(e) {}
 
-            copyFilesIntoProject();
-            var solutionFile2012 = projectRoot+'/platforms/windows/CordovaApp.vs2012.sln';
-            var solutionFile2015 = projectRoot+'/platforms/windows/CordovaApp.sln';
-            var projectFile80 = projectRoot+'/platforms/windows/CordovaApp.Windows80.jsproj';
-            var projectFile10 = projectRoot+'/platforms/windows/CordovaApp.Windows10.jsproj';
-            var projectFile81 = projectRoot+'/platforms/windows/CordovaApp.Windows.jsproj';
+        copyFilesIntoProject();
+        var solutionFile2012 = projectRoot+'/platforms/windows/CordovaApp.vs2012.sln';
+        var solutionFile2015 = projectRoot+'/platforms/windows/CordovaApp.sln';
+        var projectFile80 = projectRoot+'/platforms/windows/CordovaApp.Windows80.jsproj';
+        var projectFile10 = projectRoot+'/platforms/windows/CordovaApp.Windows10.jsproj';
+        var projectFile81 = projectRoot+'/platforms/windows/CordovaApp.Windows.jsproj';
 
-            defineArchSLN(solutionFile2012);
-            defineArchSLN(solutionFile2015);
-            fixProjectFile8(projectFile80);
-            fixProjectFile81(projectFile81);
-            fixProjectFile10(projectFile10);
+        defineArchSLN(solutionFile2012);
+        defineArchSLN(solutionFile2015);
+        fixProjectFile8(projectFile80);
+        fixProjectFile81(projectFile81);
+        fixProjectFile10(projectFile10);
 
-            console.log('Fixed!');
+        console.log('Fixed!');
 
-          } else {
-            // file exist we should not run the script
-            console.log('Skip!');
-          }
+      } else {
+        // file exist we should not run the script
+        console.log('Skip!');
+      }
 
-        });
     });
 
 
@@ -89,7 +75,7 @@ module.exports = function(context){
         for (var k = 0; k < winNames.length; k++) {
             for (var j = 0; j < archNames.length; j++) {
                 var srcPath = projectRoot+'/plugins/com.intel.security/src/windows/' + winNames[k] + '/' + archNames[j] + '/';
-                var dstPath = projectRoot+'/plugins/com.intel.security/' + winNames[k] + '/' + archNames[j] + '/';
+                var dstPath = platformRoot+'/plugins/com.intel.security/' + winNames[k] + '/' + archNames[j] + '/';
                 var dllFilesName = ['IntelSecurityServicesWRC.dll', 'IntelSecurityServicesWRC.winmd'];
 
                 for (var i = 0; i < dllFilesName.length; i++) {
