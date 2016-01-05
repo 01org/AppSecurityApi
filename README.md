@@ -28,12 +28,12 @@ This example is for Android but applicable for iOS and Windows
 	5. Add the plugin to the project (use a local copy)
 		cordova plugin add /PATH/TO/YOUR/LOCAL/COPY
 
-	6. (Optional) Verify that the plugin was added correctly 
+	6. (Optional) Verify that the plugin was added correctly
 		cordova plugin
 
     7. Build the project
 		(Optional) for Windows build instructions please see below
-		cordova build 
+		cordova build
 
 	8. (Optional) Run the project
 		cordova emulate	(SDK emulator)
@@ -42,23 +42,21 @@ This example is for Android but applicable for iOS and Windows
 
 Cordova 5.1.1 Windows build flow
 ================================
-    To overcome some gaps/issues with native library build in Windows we
-	provide a workaround script (ChooseArch_Windows.js) that you should use before
-	step 7 (build the project).
-    Copy the script from plugins\com.intel.security\src\windows to
-	platforms\windows and run it from platforms\windows directory.
+    The ChooseArch_Windows.js script has been added as a before_build hook.
+    This will properly update the solution file and copy any needed files into
+    your project.  If you cannot run hooks, manually execute the file
 	Run the following command in a shell:
-		node.exe ChooseArch_Windows.js 
-	
+		node.exe plugins\com.intel.security\scripts\ChooseArch_Windows.js
+
 	It is recommended to upgrade the Cordova windows tools, please run "cordova platform update windows@4.2.0"
-	
-    To build the Windows project per architecture please use the following commands:	
+
+    To build the Windows project per architecture please use the following commands:
     Windows 8:
 		Assuming MSBuild is at "c:\Windows\Microsoft.NET\Framework\v4.0.30319\"
 		for x86 --> c:\Windows\Microsoft.NET\Framework\v4.0.30319\MSBuild CordovaApp.Windows80.jsproj /p:Platform=x86 /t:rebuild /p:Configuration=Release
 		for x64 --> c:\Windows\Microsoft.NET\Framework\v4.0.30319\MSBuild CordovaApp.Windows80.jsproj /p:Platform=x64 /t:rebuild /p:Configuration=Release
 		for ARM --> c:\Windows\Microsoft.NET\Framework\v4.0.30319\MSBuild CordovaApp.Windows80.jsproj /p:Platform=ARM /t:rebuild /p:Configuration=Release
-		
+
     Windows 8.1:
         for x86 --> cordova prepare windows --release --arch=x86 -- --win
 					cordova compile windows --release --arch=x86 -- --win

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"    
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
     xmlns:android="http://schemas.android.com/apk/res/android"
     id="com.intel.security"
     version="1.4.0">
@@ -13,7 +13,7 @@
     <js-module src="www/appSecurityApi.js" name="Services">
         <clobbers target="intel.security" />
     </js-module>
-	
+
     <!-- android -->
     <platform name="android">
         <config-file target="res/xml/config.xml" parent="/*">
@@ -28,14 +28,14 @@
         <source-file src="src/android/SecureData.java" target-dir="src/com/intel/security" />
 		<source-file src="src/android/SecureStorage.java" target-dir="src/com/intel/security" />
         <source-file src="src/android/SecureTransport.java" target-dir="src/com/intel/security" />
-        
-		<source-file src="src/android/ErrorCodeEnum.java" target-dir="src/com/intel/security" />	
-        <source-file src="src/android/ErrorCodeException.java" target-dir="src/com/intel/security" />		
 
-	<source-file src="src/android/x86/sr_agent.cpa" target-dir="assets" />	
-        <source-file src="src/android/x86/sr_agent.vp" target-dir="assets" />	
-	<source-file src="src/android/x86/libSecurityServices.sb" target-dir="assets" />	
-		
+		<source-file src="src/android/ErrorCodeEnum.java" target-dir="src/com/intel/security" />
+        <source-file src="src/android/ErrorCodeException.java" target-dir="src/com/intel/security" />
+
+	<source-file src="src/android/x86/sr_agent.cpa" target-dir="assets" />
+        <source-file src="src/android/x86/sr_agent.vp" target-dir="assets" />
+	<source-file src="src/android/x86/libSecurityServices.sb" target-dir="assets" />
+
 	<source-file src="src/android/armeabi" 	target-dir="libs" />
 	<source-file src="src/android/armeabi-v7a" target-dir="libs" />
 	<source-file src="src/android/x86" 		target-dir="libs" />
@@ -44,22 +44,22 @@
 
     <!-- ios -->
     <platform name="ios">
-    
+
         <!--  Sets the changes that need to be made to config.xml for iOS
                 in the selected parent element. For separate parents, make sure
                 to use separate <config-file> elements with the proper parent.
                 These changes are applied by Icenium during the build process. -->
-    
+
         <config-file target="config.xml" parent="/widget/plugins" >
             <feature name="IntelSecurity">
                 <param name="ios-package" value="sService" />
             </feature>
         </config-file>
-    
-    
+
+
         <header-file src="src/ios/sService.h" />
         <source-file src="src/ios/sService.m" />
-	
+
         <header-file src="src/ios/xss_types.h" />
         <header-file src="src/ios/xss_api.h" />
         <header-file src="src/ios/xss_error.h" />
@@ -72,9 +72,8 @@
         <source-file src="src/ios/libjansson.a" framework="true" />
         <framework src="libc++.dylib" />
         <framework src="libstdc++.dylib" />
-    
     </platform>
-	
+
 	<!-- windows8 -->
     <platform name="windows8">
         <config-file target="config.xml" parent="/*">
@@ -87,8 +86,9 @@
 		</js-module>
 		<config-file target="package.appxmanifest" parent="/Package/Dependencies">
         </config-file>
+        <hook type="before_build" src="scripts/ChooseArch_Windows.js"/>
 	</platform>
-	
+
 	<!-- windows -->
     <platform name="windows">
         <config-file target="config.xml" parent="/widget">
@@ -99,8 +99,8 @@
 		<js-module src="src/windows/servicesProxy.js" name="SecureProxy">
 			<merges target="" />
 		</js-module>
-		
-	
+        <hook type="before_build" src="scripts/ChooseArch_Windows.js"/>
+
     </platform>
-	
+
 </plugin>
