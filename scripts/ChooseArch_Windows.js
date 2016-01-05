@@ -22,11 +22,8 @@ ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF S
 var fs = require('fs');
 var path=require('path');
 var appDir = path.dirname(require.main.filename);
-module.exports = function(context){
-    var cordova_util = context.requireCordovaModule('cordova-lib/src/cordova/util'),
-    projectRoot = cordova_util.isCordova();
-    platformRoot = projectRoot + '/platforms/windows';
 
+function updateWindowsArch(projectRoot,platformRoot ){
     // check if we already run the script
     fs.access(platformRoot+'/plugins/com.intel.security/win8/x86/IntelSecurityServicesWRC.dll', fs.F_OK, function (err) {
       if (err !== 1){
@@ -211,4 +208,18 @@ module.exports = function(context){
                 }
             });
     }
+}
+
+
+module.exports = function(context){
+    var cordova_util = context.requireCordovaModule('cordova-lib/src/cordova/util'),
+    projectRoot = cordova_util.isCordova();
+    platformRoot = projectRoot + '/platforms/windows';
+    updateWindowsArch(projectRoot,platformRoot);
 };
+
+if(!module.parent) {
+    var projectRoot=path.join(__dirname,'..','..','..'),
+    platformRoot=projectRoot+'/platforms/windows';
+    updateWindowsArch(projectRoot,platformRoot);
+}
